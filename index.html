@@ -73,20 +73,20 @@
   <div id="accesso" class="top scuro" style="min-height:100vh; gap:28px; padding-top:64px">
     <div class="logo"><b>GD</b><div><div style="font-family:Manrope;font-weight:800;font-size:18px">GD Marketing Online</div><div class="mute">Il tuo CRM dei contatti</div></div></div>
     <h1 style="font-size:30px;margin-top:30px">Entra nel tuo CRM</h1>
-    <div id="formAccedi" style="display:flex;flex-direction:column;gap:14px">
-      <label class="campo">Email<input id="email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
-      <label class="campo">Password<input id="password" type="password" autocomplete="current-password"></label>
-      <button class="btn acc" onclick="accedi()">Entra</button>
-      <button class="pill" onclick="vistaAttiva(true)">Primo accesso o password dimenticata</button>
-    </div>
-    <div id="formAttiva" class="nascosto" style="display:flex;flex-direction:column;gap:14px">
+    <form id="formAccedi" method="post" action="#" onsubmit="accedi(event)" style="display:flex;flex-direction:column;gap:14px">
+      <label class="campo">Email<input id="email" name="username" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+      <label class="campo">Password<input id="password" name="password" type="password" autocomplete="current-password"></label>
+      <button class="btn acc" type="submit">Entra</button>
+      <button class="pill" type="button" onclick="vistaAttiva(true)">Primo accesso o password dimenticata</button>
+    </form>
+    <form id="formAttiva" class="nascosto" method="post" action="#" onsubmit="attiva(event)" style="display:flex;flex-direction:column;gap:14px">
       <div class="mute" style="line-height:1.5">Usa il codice di 6 cifre che ti abbiamo mandato e scegli la tua password. Da lì in poi entri con email e password.</div>
-      <label class="campo">Email<input id="aEmail" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+      <label class="campo">Email<input id="aEmail" name="username" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
       <label class="campo">Codice di accesso (6 cifre)<input id="aCodice" inputmode="numeric" autocomplete="one-time-code"></label>
-      <label class="campo">Nuova password (almeno 8 caratteri)<input id="aPassword" type="password" autocomplete="new-password"></label>
-      <button class="btn acc" onclick="attiva()">Salva la password ed entra</button>
-      <button class="pill" onclick="vistaAttiva(false)">‹ Ho già la password</button>
-    </div>
+      <label class="campo">Nuova password (almeno 8 caratteri)<input id="aPassword" name="password" type="password" autocomplete="new-password"></label>
+      <button class="btn acc" type="submit">Salva la password ed entra</button>
+      <button class="pill" type="button" onclick="vistaAttiva(false)">‹ Ho già la password</button>
+    </form>
     <div id="errAccesso" class="msg err nascosto"></div>
   </div>
 
@@ -207,15 +207,23 @@ function attendi(testo) { const d = document.getElementById('errAccesso'); d.cla
 function entra(t, rinnovo) {
   google.script.run.withSuccessHandler(r => dentro(r, rinnovo)).withFailureHandler(e => { ricorda(''); fuori(e); }).rientra(t);
 }
-function accedi() {
-  attendi('Accesso in corso…');
-  google.script.run.withSuccessHandler(r => { document.getElementById('password').value = ''; dentro(r); })
-    .withFailureHandler(fuori).accedi(document.getElementById('email').value, document.getElementById('password').value);
+// dopo l'accesso il browser propone di salvare email e password (Chrome lo fa anche qui sotto, in modo esplicito)
+function salvaNelBrowser(email, password) {
+  try { if (window.PasswordCredential) navigator.credentials.store(new PasswordCredential({ id: email, password: password, name: email })); } catch (e) {}
 }
-function attiva() {
+function accedi(ev) {
+  if (ev) ev.preventDefault();
+  attendi('Accesso in corso…');
+  const em = document.getElementById('email').value, pw = document.getElementById('password').value;
+  google.script.run.withSuccessHandler(r => { salvaNelBrowser(em, pw); document.getElementById('password').value = ''; dentro(r); })
+    .withFailureHandler(fuori).accedi(em, pw);
+}
+function attiva(ev) {
+  if (ev) ev.preventDefault();
   attendi('Salvataggio della password…');
-  google.script.run.withSuccessHandler(r => { document.getElementById('aPassword').value = ''; document.getElementById('aCodice').value = ''; vistaAttiva(false); dentro(r); })
-    .withFailureHandler(fuori).attivaAccount(document.getElementById('aEmail').value, document.getElementById('aCodice').value, document.getElementById('aPassword').value);
+  const em = document.getElementById('aEmail').value, pw = document.getElementById('aPassword').value;
+  google.script.run.withSuccessHandler(r => { salvaNelBrowser(em, pw); document.getElementById('aPassword').value = ''; document.getElementById('aCodice').value = ''; vistaAttiva(false); dentro(r); })
+    .withFailureHandler(fuori).attivaAccount(em, document.getElementById('aCodice').value, pw);
 }
 function vistaAttiva(si) {
   document.getElementById('formAccedi').classList.toggle('nascosto', si);
@@ -453,7 +461,6 @@ function disegnaNumeri() {
   d.append(el('p', {className: 'mute', style: 'color:#5b6b80;text-align:center;margin:4px 0 20px', textContent: 'Conti sui contatti arrivati ' + (mese ? 'a ' + nomeMese(PERIODO) : 'da sempre') + ' (giorno arrivo lead).'}));
 }
 
-document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') accedi(); });
 if (ricordato()) { attendi('Un attimo…'); entra(ricordato()); }
 </script>
 </body>
