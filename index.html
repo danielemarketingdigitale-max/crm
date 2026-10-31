@@ -56,7 +56,9 @@
     document.getElementById('errore').classList.remove('nascosto');
   } else {
     var crm = 'https://script.google.com/macros/s/' + app + '/exec?k=' + chiave;
-    if (p.get('home') === '1' || navigator.standalone) {
+    // iPhone/iPad: dritto nel CRM solo se aperto dall'icona; in Safari resta qui, così si aggiunge la pagina con l'icona e non il CRM
+    var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (navigator.standalone || (p.get('home') === '1' && !ios)) {
       location.replace(crm);                       // aperto dall'icona: dritto nel CRM
     } else {
       // il link salvato sulla schermata Home sarà questo, che apre subito il CRM
