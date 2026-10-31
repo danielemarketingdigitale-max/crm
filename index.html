@@ -1,91 +1,460 @@
 <!doctype html>
 <html lang="it">
 <head>
+<base target="_top">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CRM GD Marketing</title>
-<meta name="apple-mobile-web-app-title" content="CRM">
-<link rel="apple-touch-icon" href="https://danielemarketingdigitale-max.github.io/crm/crm-home-v3-180.png?v=3">
-<link rel="apple-touch-icon" sizes="180x180" href="https://danielemarketingdigitale-max.github.io/crm/crm-home-v3-180.png?v=3">
-<link rel="apple-touch-icon" sizes="167x167" href="https://danielemarketingdigitale-max.github.io/crm/crm-home-v3-167.png?v=3">
-<link rel="apple-touch-icon" sizes="152x152" href="https://danielemarketingdigitale-max.github.io/crm/crm-home-v3-152.png?v=3">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0f1b2d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="icon" type="image/png" href="crm-home-v3-180.png?v=3">
-<meta name="theme-color" content="#0f1b2d">
+<meta name="apple-mobile-web-app-title" content="CRM">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/crm-home-v3-180.png">
+<link rel="icon" type="image/png" href="/crm-home-v3-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --ink: #0f1b2d; --ink2: #16263d; --accent: #5eead4; --mute: #a9b6c8; }
+  :root { --ink:#0f1b2d; --ink2:#16263d; --line:#2c3f5a; --mute:#a9b6c8; --bg:#f4f6f9; --accent:#5eead4; }
   * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; background: linear-gradient(160deg, var(--ink2), #0a1322); color: #fff;
-         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; }
-  main { width: 100%; max-width: 420px; padding: 56px 20px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
-  img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 12px 40px rgba(0,0,0,.45); }
-  h1 { margin: 6px 0 0; font-size: 26px; }
-  p { margin: 0; color: var(--mute); line-height: 1.5; }
-  ol { text-align: left; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 16px 16px 16px 36px; margin: 6px 0; line-height: 1.6; width: 100%; }
-  b { color: var(--accent); }
-  a.btn { display: block; width: 100%; padding: 15px; border-radius: 12px; background: var(--accent); color: var(--ink); font-weight: 700; text-decoration: none; }
-  input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: #fff; font-size: 16px; margin: 12px 0; }
-  .nascosto { display: none; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  .wrap { max-width: 520px; margin: 0 auto; min-height: 100vh; }
+  .top { background: var(--ink); color: #fff; padding: 28px 18px 18px; display: flex; flex-direction: column; gap: 14px; }
+  h1 { margin: 0; font-family: Manrope, sans-serif; font-weight: 800; font-size: 24px; }
+  .mute { color: var(--mute); font-size: 13px; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo b { width: 44px; height: 44px; border-radius: 12px; background: var(--accent); color: var(--ink); display: flex; align-items: center; justify-content: center; font-family: Manrope; font-weight: 800; }
+  input, select, textarea { font: inherit; font-size: 16px; }
+  .campo { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #44546a; }
+  .campo input, .campo textarea { min-height: 44px; border-radius: 10px; border: 1px solid #cfd8e3; background: #fff; padding: 8px 12px; color: var(--ink); }
+  .scuro .campo { color: #c4cfdd; }
+  .scuro .campo input { background: var(--ink2); border-color: var(--line); color: #fff; }
+  .btn { min-height: 48px; border-radius: 12px; border: none; font-weight: 700; font-size: 15px; cursor: pointer; padding: 0 16px; }
+  .btn.acc { background: var(--accent); color: var(--ink); }
+  .btn.scuro { background: var(--ink); color: #fff; }
+  .btn.bianco { background: #fff; color: var(--ink); }
+  .pill { min-height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid #cfd8e3; background: #fff; color: var(--ink); }
+  .top .pill { border-color: var(--line); background: transparent; color: #fff; }
+  .pill.on { border: none; background: var(--accent); color: var(--ink); font-weight: 600; }
+  .righe { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+  .card { text-align: left; width: 100%; border: none; cursor: pointer; background: #fff; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 1px 2px rgba(15,27,45,.08); font: inherit; color: var(--ink); }
+  .riga { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .chip { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 10px; white-space: nowrap; }
+  .num { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; }
+  .num div { background: var(--ink2); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; }
+  .num b { font-family: Manrope; font-size: 20px; }
+  .box { background: #fff; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(15,27,45,.08); }
+  .scelte { display: flex; flex-wrap: wrap; gap: 8px; }
+  .segnale { font-size: 12px; color: #166534; background: #dcfce7; border-radius: 8px; padding: 6px 10px; }
+  .msg { margin: 12px 14px; padding: 10px 12px; border-radius: 10px; font-size: 14px; }
+  .ok { background: #dcfce7; color: #166534; } .err { background: #fee2e2; color: #991b1b; }
+  .dash { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+  .kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi div { background: #fff; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 1px 2px rgba(15,27,45,.08); }
+  .kpi b { font-family: Manrope, sans-serif; font-size: 24px; }
+  .kpi span { font-size: 12px; color: #5b6b80; }
+  .kpi .forte { background: var(--ink); color: #fff; } .kpi .forte span { color: var(--mute); }
+  .barra { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; font-size: 13px; color: #44546a; }
+  .barra i { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: #e8edf3; overflow: hidden; display: block; }
+  .barra i em { display: block; height: 100%; border-radius: 4px; }
+  .barra b { color: var(--ink); }
+  .soldi { display: grid; grid-template-columns: 1fr auto; gap: 8px 10px; font-size: 14px; }
+  .soldi span { color: #44546a; } .soldi b { text-align: right; }
+  .spesa { display: flex; gap: 8px; align-items: flex-end; }
+  .spesa .campo { flex: 1; }
+  .nascosto { display: none !important; }
 </style>
 </head>
 <body>
-<main>
-  <img src="icona-512.png?v=3" alt="">
-  <h1>CRM GD Marketing</h1>
+<div class="wrap">
 
-  <div id="istruzioni" class="nascosto">
-    <p>Metti il CRM sulla schermata Home, con questa icona:</p>
-    <ol>
-      <li>iPhone: premi <b>Condividi</b> (il quadrato con la freccia) e poi <b>Aggiungi alla schermata Home</b>.</li>
-      <li>Android: menu <b>⋮</b> e poi <b>Aggiungi a schermata Home</b>.</li>
-      <li>Da lì in poi tocca l'icona: entri direttamente nel tuo CRM.</li>
-    </ol>
-    <a class="btn" id="apri" href="#">Apri il CRM adesso</a>
+  <!-- accesso -->
+  <div id="accesso" class="top scuro" style="min-height:100vh; gap:28px; padding-top:64px">
+    <div class="logo"><b>GD</b><div><div style="font-family:Manrope;font-weight:800;font-size:18px">GD Marketing Online</div><div class="mute">Il tuo CRM dei contatti</div></div></div>
+    <h1 style="font-size:30px;margin-top:30px">Entra nel tuo CRM</h1>
+    <div id="formAccedi" style="display:flex;flex-direction:column;gap:14px">
+      <label class="campo">Email<input id="email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+      <label class="campo">Password<input id="password" type="password" autocomplete="current-password"></label>
+      <button class="btn acc" onclick="accedi()">Entra</button>
+      <button class="pill" onclick="vistaAttiva(true)">Primo accesso o password dimenticata</button>
+    </div>
+    <div id="formAttiva" class="nascosto" style="display:flex;flex-direction:column;gap:14px">
+      <div class="mute" style="line-height:1.5">Usa il codice di 6 cifre che ti abbiamo mandato e scegli la tua password. Da lì in poi entri con email e password.</div>
+      <label class="campo">Email<input id="aEmail" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+      <label class="campo">Codice di accesso (6 cifre)<input id="aCodice" inputmode="numeric" autocomplete="one-time-code"></label>
+      <label class="campo">Nuova password (almeno 8 caratteri)<input id="aPassword" type="password" autocomplete="new-password"></label>
+      <button class="btn acc" onclick="attiva()">Salva la password ed entra</button>
+      <button class="pill" onclick="vistaAttiva(false)">‹ Ho già la password</button>
+    </div>
+    <div id="errAccesso" class="msg err nascosto"></div>
   </div>
 
-  <div id="errore" class="nascosto">
-    <p>Incolla qui una volta il tuo link personale: da lì in poi questa icona ti porta dritto nel CRM.</p>
-    <input id="incolla" type="url" placeholder="Incolla il link" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <a class="btn" id="usa" href="#">Entra</a>
-    <p id="nonvalido" class="nascosto">Questo link non è completo. Copia di nuovo il link personale che ti è stato mandato.</p>
+  <!-- elenco -->
+  <div id="elenco" class="nascosto">
+    <div class="top">
+      <div class="riga"><h1>I tuoi contatti</h1><div style="display:flex;gap:8px"><button class="pill on" onclick="apriNumeri()">Numeri</button><button class="pill" onclick="esci()">Esci</button></div></div>
+      <div class="mute" id="chiSono"></div>
+      <div class="num" id="numeri"></div>
+      <div class="scelte" id="filtri"></div>
+    </div>
+    <div class="righe" id="lista"></div>
   </div>
-</main>
+
+  <!-- scheda -->
+  <div id="scheda" class="nascosto">
+    <div class="top">
+      <button class="pill" style="align-self:flex-start" onclick="mostra('elenco')">‹ Contatti</button>
+      <h1 id="sNome"></h1>
+      <div class="mute" id="sInfo"></div>
+      <div class="mute" id="sModulo" style="line-height:1.4"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <a id="sChiama" class="btn bianco" style="display:flex;align-items:center;justify-content:center;text-decoration:none" onclick="contattato()">Chiama</a>
+        <a id="sWa" class="btn acc" target="_blank" style="display:flex;align-items:center;justify-content:center;text-decoration:none" onclick="contattato()">WhatsApp</a>
+      </div>
+    </div>
+    <div class="righe" style="padding-bottom:0"><div class="box" id="sTent"></div></div>
+    <div class="righe" id="gruppi"></div>
+    <div class="righe" style="padding-top:0">
+      <div class="box">
+        <b>Date e prezzo</b>
+        <label class="campo">Giorno del ricontatto<input id="fRic" placeholder="gg/mm/aaaa"></label>
+        <label class="campo">Data e ora della consulenza<input id="fData" type="datetime-local"><span id="fDataVecchia" style="font-size:12px;color:#5b6b80"></span></label>
+        <label class="campo">Data conversione<input id="fConv" placeholder="gg/mm/aaaa"></label>
+        <label class="campo">Prezzo servizio (serve a Meta per il valore dell'acquisto)<input id="fPrezzo" inputmode="decimal"></label>
+      </div>
+      <label class="campo">Note sul lead – com'è andata davvero<textarea id="fNote" rows="4"></textarea></label>
+      <label class="campo" id="campoNotePers">Note personali – solo per te, non vanno a Meta<textarea id="fNotePers" rows="3"></textarea></label>
+      <button class="btn scuro" onclick="salva()">Salva</button>
+      <div id="esito" class="msg nascosto"></div>
+    </div>
+  </div>
+  <!-- numeri -->
+  <div id="cruscotto" class="nascosto">
+    <div class="top scuro">
+      <button class="pill" style="align-self:flex-start" onclick="mostra('elenco')">‹ Contatti</button>
+      <h1>I tuoi numeri</h1>
+      <div class="scelte" id="periodi"></div>
+      <div class="spesa" id="boxSpesa"><label class="campo" id="lblSpesa">Spesa ads del mese (€)<input id="fSpesa" inputmode="decimal" placeholder="es. 300"></label><button class="btn acc" style="min-height:44px" onclick="salvaSpesa()">Salva</button></div>
+      <div class="mute" id="notaSpesa"></div>
+    </div>
+    <div class="dash" id="dash"></div>
+  </div>
+</div>
+
 <script>
-  // Il link personale è nella parte dopo "#": il browser la legge ma non la manda mai al server di questa pagina.
-  // Lo si cerca in tutto l'indirizzo (anche se un'app l'ha codificato) e lo si ricorda su questo telefono,
-  // perché l'icona sulla Home a volte perde la parte dopo "#".
-  function leggi(t) {
-    for (var i = 0; i < 3; i++) { try { t = decodeURIComponent(t); } catch (e) { break; } }
-    var a = /[#&?]a=(AKfyc[A-Za-z0-9_-]{20,120})/.exec(t), k = /[#&?]k=([a-f0-9]{64})/.exec(t);
-    return a && k ? { app: a[1], chiave: k[1] } : null;
-  }
-  function ricorda(l) { try { localStorage.setItem('crm-link', JSON.stringify(l)); } catch (e) {} }
-  function ricordato() { try { return JSON.parse(localStorage.getItem('crm-link')); } catch (e) { return null; } }
-  var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var dalLink = leggi(location.href), l = dalLink || ricordato();
-  var home = /[#&]home=1/.test(location.hash);
-  function vai(l) { location.replace('https://script.google.com/macros/s/' + l.app + '/exec?k=' + l.chiave); }
+// il server resta lo stesso (Apps Script): la pagina lo chiama da qui come faceva prima con google.script.run
+const API = 'https://script.google.com/macros/s/AKfycbxSJfxYAK34wEgLI1KezPykRH6F7TpNTdzZOyhDkSFil1UhTqLfI5siTS8MB1CQthLPwA/exec';
+function chiamata(ok, ko) {
+  return new Proxy({}, { get: (t, nome) =>
+    nome === 'withSuccessHandler' ? f => chiamata(f, ko) :
+    nome === 'withFailureHandler' ? f => chiamata(ok, f) :
+    (...args) => {
+      fetch(API, { method: 'POST', body: JSON.stringify({ azione: nome, args: args }) })
+        .then(r => r.json())
+        .then(r => r.ok ? ok && ok(r.dati) : ko && ko(new Error(r.errore)))
+        .catch(() => ko && ko(new Error('Connessione assente o server non raggiungibile: riprova tra poco')));
+    } });
+}
+const google = { script: { get run() { return chiamata(null, null); } } };
 
-  if (l) ricorda(l);
-  if (!l) {
-    document.getElementById('errore').classList.remove('nascosto');
-    document.getElementById('usa').onclick = function (ev) {
-      ev.preventDefault();
-      var n = leggi(document.getElementById('incolla').value.trim());
-      if (!n) { document.getElementById('nonvalido').classList.remove('nascosto'); return; }
-      ricorda(n); vai(n);
-    };
-  } else if (navigator.standalone || !dalLink || (home && !ios)) {
-    vai(l);                                        // aperto dall'icona: dritto nel CRM
-  } else {
-    // iPhone/iPad in Safari: resta qui, così si aggiunge la pagina con l'icona e non il CRM
-    history.replaceState(null, '', location.pathname + '#a=' + l.app + '&k=' + l.chiave + '&home=1');
-    document.getElementById('apri').href = 'https://script.google.com/macros/s/' + l.app + '/exec?k=' + l.chiave;
-    document.getElementById('istruzioni').classList.remove('nascosto');
+let TOKEN = null, LEADS = [], TUTTI = [], FILTRO = 'Oggi', SEL = null, MOD = {};
+const GRUPPI = [
+  ['In target?', 'qualità lead', [['In target (qualificato)','qualificato'],['Cliente (convertito)','convertito'],['Venuto, non ha comprato','non convertito'],['Perso','perso'],['Non in target','non qualificato'],['Spam','spam']],
+    {qualificato:'Segnale a Meta: LeadQualificato', convertito:'Il segnale di acquisto parte da "Cliente = si" con il prezzo', 'non convertito':'Nessun segnale negativo: e\' venuto in consulenza', perso:'Segnale a Meta: LeadPerso', 'non qualificato':'Segnale a Meta: LeadNonInTarget', spam:'Segnale a Meta: LeadSpam'}],
+  ['Contattato?', 'contattato', [['Si','si'],['No','no']], {}],
+  ['Ha risposto?', 'risposto', [['Si','si'],['No','no']], {si:'Segnale a Meta: Contact'}],
+  ['Richiamato (follow up)?', 'follow up', [['Si','si'],['No','no']], {}],
+  ['Consulenza prenotata?', 'prenotazione consulenza', [['Si','si'],['No','no']], {si:'Segnale a Meta: Schedule'}],
+  ['Consulenza fatta?', 'consulenza', [['In attesa','attesa'],['Si, e\' venuto','si'],['No, non e\' venuto','no']], {si:'Segnale a Meta: ConsulenzaFatta', no:'Segnale a Meta: ConsulenzaSaltata'}],
+  ['E\' diventato cliente?', 'cliente', [['Si','si'],['No','no']], {si:'Segnale a Meta: Purchase (solo con il prezzo compilato)'}]
+];
+const COL = {'Nuovo':['#e0f2fe','#075985'],'Da richiamare':['#fef3c7','#92400e'],'Consulenza fissata':['#dcfce7','#166534'],'Non venuto':['#ffedd5','#9a3412'],'Deve decidere':['#fae8ff','#86198f'],'Cliente':['#ede9fe','#5b21b6'],'Chiuso':['#f1f5f9','#334155']};
+const lo = x => String(x || '').trim().toLowerCase();
+const si = x => /^s[iì]$/.test(lo(x));
+
+function fase(l) {
+  const q = lo(l['qualità lead']);
+  if (['spam','non qualificato','perso'].includes(q) || lo(l['cliente']) === 'no') return 'Chiuso';
+  if (si(l['cliente']) || q === 'convertito') return 'Cliente';
+  if (lo(l['consulenza']) === 'no') return 'Non venuto';
+  if (si(l['consulenza']) || q === 'non convertito') return 'Deve decidere';
+  if (si(l['prenotazione consulenza'])) return 'Consulenza fissata';
+  if (!si(l['contattato'])) return 'Nuovo';
+  return 'Da richiamare';
+}
+const FILTRI = {'Oggi': (f, l) => !!daFare(l), 'Da fare': f => ['Nuovo','Da richiamare','Non venuto','Deve decidere'].includes(f), 'Consulenza fissata': f => f === 'Consulenza fissata', 'Clienti': f => f === 'Cliente', 'Chiusi': f => f === 'Chiuso', 'Tutti': () => true};
+
+function mostra(id) { ['accesso','elenco','scheda','cruscotto'].forEach(x => document.getElementById(x).classList.toggle('nascosto', x !== id)); window.scrollTo(0,0); if (id === 'elenco') disegnaElenco(); if (id === 'cruscotto') disegnaNumeri(); }
+function errore(e) {
+  const m = e.message || String(e);
+  if (/scaduta/.test(m) && ricordato()) { TOKEN = null; entra(ricordato(), true); return; }   // sessione scaduta: si rientra da soli
+  const d = document.getElementById(TOKEN ? 'esito' : 'errAccesso'); d.className = 'msg err'; d.style.color = ''; d.textContent = m;
+  if (/scaduta/.test(m)) esci();
+}
+
+// il telefono ricorda l'accesso (90 giorni) finche' non si preme "Esci"; la password non viene mai salvata
+function ricordato() { try { return localStorage.getItem('crm_ricorda') || ''; } catch (e) { return ''; } }
+function ricorda(t) { try { t ? localStorage.setItem('crm_ricorda', t) : localStorage.removeItem('crm_ricorda'); } catch (e) {} }
+
+function dentro(r, rinnovo) {
+  TOKEN = r.token; if (r.ricorda) ricorda(r.ricorda); document.getElementById('chiSono').textContent = r.nome;
+  document.getElementById('errAccesso').className = 'msg err nascosto';
+  if (rinnovo && !document.getElementById('scheda').classList.contains('nascosto')) { const d = document.getElementById('esito'); d.className = 'msg'; d.textContent = 'Sessione rinnovata: premi di nuovo Salva.'; } else carica();
+}
+function fuori(e) { TOKEN = null; mostra('accesso'); errore(e); }
+function attendi(testo) { const d = document.getElementById('errAccesso'); d.className = 'msg'; d.style.color = '#c4cfdd'; d.textContent = testo; }
+function entra(t, rinnovo) {
+  google.script.run.withSuccessHandler(r => dentro(r, rinnovo)).withFailureHandler(e => { ricorda(''); fuori(e); }).rientra(t);
+}
+function accedi() {
+  attendi('Accesso in corso…');
+  google.script.run.withSuccessHandler(r => { document.getElementById('password').value = ''; dentro(r); })
+    .withFailureHandler(fuori).accedi(document.getElementById('email').value, document.getElementById('password').value);
+}
+function attiva() {
+  attendi('Salvataggio della password…');
+  google.script.run.withSuccessHandler(r => { document.getElementById('aPassword').value = ''; document.getElementById('aCodice').value = ''; vistaAttiva(false); dentro(r); })
+    .withFailureHandler(fuori).attivaAccount(document.getElementById('aEmail').value, document.getElementById('aCodice').value, document.getElementById('aPassword').value);
+}
+function vistaAttiva(si) {
+  document.getElementById('formAccedi').classList.toggle('nascosto', si);
+  document.getElementById('formAttiva').classList.toggle('nascosto', !si);
+  document.getElementById('errAccesso').className = 'msg err nascosto';
+  if (si) document.getElementById('aEmail').value = document.getElementById('email').value;
+}
+function esci() { const t = ricordato(); if (t) google.script.run.esciDaQui(t); TOKEN = null; ricorda(''); mostra('accesso'); }
+function carica() { google.script.run.withSuccessHandler(l => { TUTTI = l; LEADS = l.filter(x => !x.storico); mostra('elenco'); }).withFailureHandler(errore).contatti(TOKEN); }
+
+function el(tag, props, figli) { const e = document.createElement(tag); Object.assign(e, props || {}); (figli || []).forEach(f => e.append(f)); return e; }
+
+function disegnaElenco() {
+  const n = document.getElementById('numeri'); n.innerHTML = '';
+  [['contatti', LEADS.length], ['in target', LEADS.filter(l => ['qualificato','convertito','non convertito'].includes(lo(l['qualità lead']))).length],
+   ['consulenze', LEADS.filter(l => si(l['prenotazione consulenza'])).length], ['clienti', LEADS.filter(l => si(l['cliente'])).length]]
+    .forEach(([k, v]) => n.append(el('div', {}, [el('b', {textContent: v}), el('span', {className: 'mute', textContent: k})])));
+  const f = document.getElementById('filtri'); f.innerHTML = '';
+  Object.keys(FILTRI).forEach(k => f.append(el('button', {className: 'pill' + (k === FILTRO ? ' on' : ''), textContent: k, onclick: () => { FILTRO = k; disegnaElenco(); }})));
+  const lista = document.getElementById('lista'); lista.innerHTML = '';
+  const vis = LEADS.filter(l => FILTRI[FILTRO](fase(l), l));
+  if (!vis.length) lista.append(el('p', {className: 'mute', style: 'text-align:center;color:#5b6b80', textContent: 'Nessun contatto qui.'}));
+  vis.forEach(l => {
+    const ph = fase(l), c = COL[ph];
+    lista.append(el('button', {className: 'card', onclick: () => apri(l)}, [
+      el('div', {className: 'riga'}, [el('b', {textContent: l['nome e cognome'] || '(senza nome)'}), el('span', {className: 'mute', style: 'color:#5b6b80', textContent: l['giorno arrivo lead']})]),
+      el('div', {className: 'riga'}, [el('span', {style: 'font-size:13px;color:#44546a', textContent: (l['città'] || '') + (l['qualità lead'] ? ' · ' + l['qualità lead'] : '')}),
+        el('span', {className: 'chip', style: 'background:' + c[0] + ';color:' + c[1], textContent: FILTRO === 'Oggi' ? daFare(l) : ph})])
+    ]));
+  });
+}
+
+// ------------------------------------------------------------------ da fare oggi e tentativi
+const MAX_T = 5;
+function dataDa(t) {
+  t = String(t || '');
+  let m = t.match(/(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{1,2}):(\d{2}))?/);
+  if (m) return new Date(+m[1], m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0));
+  m = t.match(/(\d{1,2})[\/.\-](\d{1,2})(?:[\/.\-](\d{2,4}))?(?:\D+(\d{1,2})[:.](\d{2}))?/);
+  if (!m) return null;
+  const oggi = new Date();
+  let a = m[3] ? +m[3] : oggi.getFullYear(); if (a < 100) a += 2000;
+  const d = new Date(a, m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0));
+  if (isNaN(d)) return null;
+  if (!m[3] && giorni(d) < -60) d.setFullYear(a + 1);
+  return d;
+}
+function giorni(d) { const o = new Date(); o.setHours(0, 0, 0, 0); const x = new Date(d); x.setHours(0, 0, 0, 0); return Math.round((x - o) / 864e5); }
+function tentativi(l) { return parseInt(String(l['tentativi di contatto'] || '0'), 10) || 0; }
+function ultimoTentativo(l) { return dataDa(String(l['tentativi di contatto'] || '').split('–')[1]); }
+function daFare(l) {
+  const q = lo(l['qualità lead']);
+  if (['spam', 'non qualificato', 'perso', 'convertito'].includes(q) || si(l['cliente']) || lo(l['cliente']) === 'no') return '';
+  if (si(l['prenotazione consulenza']) && !si(l['consulenza']) && lo(l['consulenza']) !== 'no') {
+    const d = dataDa(l['data consulenza']); if (!d) return '';
+    const g = giorni(d);
+    return g === 0 ? 'Consulenza oggi' : g === 1 ? 'Consulenza domani: ricordaglielo' : g === 2 ? 'Consulenza tra 2 giorni: ricordaglielo' : '';
   }
+  if (si(l['consulenza']) || q === 'non convertito') return '';
+  const r = dataDa(l['giorno del ricontatto']);
+  if (si(l['risposto']) || lo(l['consulenza']) === 'no') {
+    return r && giorni(r) <= 0 && giorni(r) >= -7 ? (lo(l['consulenza']) === 'no' ? 'Non è venuto: richiamalo' : 'Da richiamare oggi') : '';
+  }
+  const t = tentativi(l);
+  if (t >= MAX_T) return '5 tentativi senza risposta: chiudilo';
+  const u = ultimoTentativo(l); if (u && giorni(u) >= 0) return '';
+  if (r && giorni(r) > 0) return '';
+  const arrivo = dataDa(l['giorno arrivo lead']);
+  if (!t && arrivo && giorni(arrivo) < -30) return '';
+  return t === 0 && !si(l['contattato']) ? 'Nuovo: chiamalo' : 'Tentativo ' + (t + 1) + ' di ' + MAX_T;
+}
+const due = n => String(n).padStart(2, '0');
+function perInput(d) { return d.getFullYear() + '-' + due(d.getMonth() + 1) + '-' + due(d.getDate()) + 'T' + due(d.getHours()) + ':' + due(d.getMinutes()); }
+
+function disegnaTent() {
+  const b = document.getElementById('sTent'); b.innerHTML = '';
+  const t = tentativi(SEL), risp = si(SEL['risposto']);
+  b.append(el('b', {textContent: 'Tentativi di contatto: ' + t + ' su ' + MAX_T}));
+  b.append(el('div', {style: 'font-size:13px;color:#5b6b80', textContent: risp ? 'Ha risposto: i tentativi non contano piu\'.'
+    : t >= MAX_T ? '5 tentativi senza risposta: puoi chiuderlo come perso.' : 'Ogni volta che premi Chiama o WhatsApp si conta un tentativo (uno al giorno).'}));
+  const r = el('div', {className: 'scelte'});
+  r.append(el('button', {className: 'pill', textContent: '− 1', onclick: () => segnaTentativo(-1)}));
+  r.append(el('button', {className: 'pill', textContent: '+ 1 non ha risposto', onclick: () => segnaTentativo(1)}));
+  if (t >= MAX_T && !risp && lo(SEL['qualità lead']) !== 'perso') r.append(el('button', {className: 'pill on', textContent: 'Segna perso', onclick: () => {
+    MOD['qualità lead'] = 'perso'; disegnaGruppi();
+    const d = document.getElementById('esito'); d.className = 'msg ok'; d.textContent = 'Premi Salva per chiuderlo come perso (segnale LeadPerso a Meta).';
+  }}));
+  b.append(r);
+}
+/** Il tentativo si salva subito nel foglio, senza premere Salva. */
+function segnaTentativo(n) {
+  const t = Math.max(0, Math.min(MAX_T, tentativi(SEL) + n));
+  const campi = {'tentativi di contatto': t ? t + ' – ' + new Date().toLocaleDateString('it-IT') : '0'};
+  if (n > 0) campi['contattato'] = 'si';
+  google.script.run.withSuccessHandler(() => { Object.assign(SEL, campi); delete MOD['contattato']; disegnaTent(); disegnaGruppi(); })
+    .withFailureHandler(errore).salva(TOKEN, SEL.riga, SEL['id lead'], campi);
+}
+
+function apri(l) {
+  SEL = l; MOD = {};
+  document.getElementById('sNome').textContent = l['nome e cognome'] || '(senza nome)';
+  document.getElementById('sInfo').textContent = (l['città'] || '') + ' · arrivato il ' + (l['giorno arrivo lead'] || '');
+  document.getElementById('sModulo').textContent = l['note lead'] || '';
+  let tel = String(l['numero'] || '').replace(/\D/g, ''); if (/^3\d{8,9}$/.test(tel)) tel = '39' + tel;
+  document.getElementById('sChiama').href = 'tel:+' + tel;
+  document.getElementById('sWa').href = 'https://wa.me/' + tel;
+  document.getElementById('fRic').value = l['giorno del ricontatto'] || '';
+  const dc = dataDa(l['data consulenza']);
+  document.getElementById('fData').value = dc ? perInput(dc) : '';
+  document.getElementById('fDataVecchia').textContent = l['data consulenza'] && !dc ? 'Nel foglio c\'e\' scritto: ' + l['data consulenza'] : '';
+  document.getElementById('fConv').value = l['data conversione'] || '';
+  document.getElementById('fPrezzo').value = l['prezzo servizio'] || '';
+  document.getElementById('fNote').value = l['note sul lead'] || '';
+  document.getElementById('fNotePers').value = l['note personali (non va a meta)'] || '';
+  document.getElementById('campoNotePers').style.display = ('note personali (non va a meta)' in l) ? '' : 'none';
+  document.getElementById('esito').className = 'msg nascosto';
+  disegnaTent(); disegnaGruppi(); mostra('scheda');
+}
+function valore(col) { return MOD[col] !== undefined ? MOD[col] : lo(SEL[col]); }
+function disegnaGruppi() {
+  const g = document.getElementById('gruppi'); g.innerHTML = '';
+  GRUPPI.forEach(([titolo, col, opz, seg]) => {
+    const v = valore(col);
+    g.append(el('div', {className: 'box'}, [
+      el('b', {textContent: titolo}),
+      el('div', {className: 'scelte'}, opz.map(([nome, val]) => el('button', {className: 'pill' + (v === val || (val === 'si' && si(v)) ? ' on' : ''), textContent: nome, onclick: () => { MOD[col] = val; disegnaGruppi(); }}))),
+      ...(seg[v] || (si(v) && seg.si) ? [el('div', {className: 'segnale', textContent: seg[v] || seg.si})] : [])
+    ]));
+  });
+}
+function contattato() {
+  const u = ultimoTentativo(SEL); if (!si(SEL['risposto']) && !(u && giorni(u) === 0)) segnaTentativo(1);   // un tentativo al giorno
+  MOD['contattato'] = 'si'; if (!document.getElementById('fRic').value) document.getElementById('fRic').value = new Date().toLocaleDateString('it-IT'); disegnaGruppi(); }
+
+function salva() {
+  const campi = Object.assign({}, MOD);
+  const extra = {'giorno del ricontatto': 'fRic', 'data conversione': 'fConv', 'prezzo servizio': 'fPrezzo', 'note sul lead': 'fNote', 'note personali (non va a meta)': 'fNotePers'};
+  Object.keys(extra).forEach(c => { const v = document.getElementById(extra[c]).value; if (v !== (SEL[c] || '')) campi[c] = v; });
+  const vd = document.getElementById('fData').value;   // calendario -> "gg/mm/aaaa hh:mm" come nel foglio
+  if (vd) { const p = vd.split('T'), g = p[0].split('-'), prima = dataDa(SEL['data consulenza']);
+    if (!prima || perInput(prima) !== vd) campi['data consulenza'] = g[2] + '/' + g[1] + '/' + g[0] + (p[1] && p[1] !== '00:00' ? ' ' + p[1] : ''); }
+  if (si(campi['cliente'] || SEL['cliente']) && !(campi['prezzo servizio'] || SEL['prezzo servizio'])) {
+    const d = document.getElementById('esito'); d.className = 'msg err'; d.textContent = 'Inserisci il prezzo: senza prezzo Meta non riceve il valore dell\'acquisto.'; return;
+  }
+  const d = document.getElementById('esito'); d.className = 'msg ok'; d.textContent = 'Salvataggio…';
+  google.script.run.withSuccessHandler(() => { Object.assign(SEL, campi); MOD = {}; d.textContent = 'Salvato nel foglio. I segnali partono verso Meta entro un\'ora.'; disegnaGruppi(); })
+    .withFailureHandler(errore).salva(TOKEN, SEL.riga, SEL['id lead'], campi);
+}
+// ------------------------------------------------------------------ numeri (dashboard)
+// conti sui contatti arrivati nel periodo scelto (giorno arrivo lead); la spesa ads si inserisce a mano per mese
+const MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+let SPESE = {}, PERIODO = null;
+function meseChiave(indietro) { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - indietro); return d.getFullYear() + '-' + due(d.getMonth() + 1); }
+function nomeMese(k) { const p = k.split('-'); return MESI[+p[1] - 1] + ' ' + p[0]; }
+function euro(n) { return n.toLocaleString('it-IT', {style: 'currency', currency: 'EUR', maximumFractionDigits: n < 100 ? 2 : 0}); }
+function cifra(v) { return Number(String(v || '').replace(/[^\d,.-]/g, '').replace(/\.(?=\d{3}(\D|$))/g, '').replace(',', '.')) || 0; }
+function nelPeriodo(l) {
+  if (PERIODO === 'tutto') return true;
+  const d = dataDa(l['giorno arrivo lead']);
+  return !!d && d.getFullYear() + '-' + due(d.getMonth() + 1) === PERIODO;
+}
+function apriNumeri() {
+  if (!PERIODO) PERIODO = meseChiave(0);
+  mostra('cruscotto');
+  google.script.run.withSuccessHandler(s => { SPESE = s || {}; disegnaNumeri(); }).withFailureHandler(errore).spese(TOKEN);
+}
+function salvaSpesa() {
+  const v = document.getElementById('fSpesa').value;
+  document.getElementById('notaSpesa').textContent = 'Salvataggio…';
+  google.script.run.withSuccessHandler(s => { SPESE = s || {}; disegnaNumeri(); }).withFailureHandler(errore).salvaSpesa(TOKEN, PERIODO, v);
+}
+
+function disegnaNumeri() {
+  const p = document.getElementById('periodi'); p.innerHTML = '';
+  [[meseChiave(0), 'Questo mese'], [meseChiave(1), nomeMese(meseChiave(1))], [meseChiave(2), nomeMese(meseChiave(2))], ['tutto', 'Da sempre']]
+    .forEach(([k, t]) => p.append(el('button', {className: 'pill' + (k === PERIODO ? ' on' : ''), textContent: t, onclick: () => { PERIODO = k; disegnaNumeri(); }})));
+  const mese = PERIODO !== 'tutto';
+  const spesa = mese ? (SPESE[PERIODO] || 0) : Object.keys(SPESE).reduce((s, k) => s + (SPESE[k] || 0), 0);
+  document.getElementById('boxSpesa').classList.toggle('nascosto', !mese);
+  if (mese) {
+    document.getElementById('lblSpesa').firstChild.textContent = 'Spesa ads di ' + nomeMese(PERIODO) + ' (€)';
+    document.getElementById('fSpesa').value = SPESE[PERIODO] ? String(SPESE[PERIODO]).replace('.', ',') : '';
+  }
+  document.getElementById('notaSpesa').textContent = mese
+    ? (spesa ? 'Costi calcolati su ' + euro(spesa) + ' di spesa.' : 'Inserisci la spesa del mese per vedere il costo per consulenza e per cliente.')
+    : 'Spesa totale inserita: ' + euro(spesa) + ' (somma dei mesi).';
+
+  const L = TUTTI.filter(nelPeriodo), q = l => lo(l['qualità lead']), n = f => L.filter(f).length;
+  const tot = L.length;
+  const inTarget = n(l => ['qualificato', 'convertito', 'non convertito'].includes(q(l)));
+  const fuori = n(l => q(l) === 'non qualificato'), spam = n(l => q(l) === 'spam'), persi = n(l => q(l) === 'perso');
+  const daValutare = tot - inTarget - fuori - spam - persi;
+  const contattato = l => si(l['contattato']) || tentativi(l) > 0 || si(l['risposto']);
+  const contattati = n(contattato), risposto = n(l => si(l['risposto']));
+  const nonRisposto = n(l => contattato(l) && !si(l['risposto'])), nonContattati = tot - contattati;
+  const prenotate = n(l => si(l['prenotazione consulenza'])), fatte = n(l => si(l['consulenza'])), saltate = n(l => lo(l['consulenza']) === 'no');
+  const isCliente = l => si(l['cliente']) || q(l) === 'convertito';
+  const clienti = n(isCliente);
+  const incasso = L.filter(isCliente).reduce((s, l) => s + cifra(l['prezzo servizio']), 0);
+  const costo = k => spesa && k ? euro(spesa / k) : '—';
+  const perc = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+
+  const d = document.getElementById('dash'); d.innerHTML = '';
+  const kpi = el('div', {className: 'kpi'});
+  [['Potenziali clienti', tot], ['In target', inTarget], ['Consulenze prenotate', prenotate], ['Clienti', clienti],
+   ['Costo per consulenza', costo(prenotate), 1], ['Costo per cliente', costo(clienti), 1]]
+    .forEach(([t, v, forte]) => kpi.append(el('div', {className: forte ? 'forte' : ''}, [el('b', {textContent: v}), el('span', {textContent: t})])));
+  d.append(kpi);
+
+  const barre = (titolo, righe, base) => {
+    const b = el('div', {className: 'box'}, [el('b', {textContent: titolo})]);
+    righe.forEach(([t, v, colore]) => {
+      const fill = el('em', {}); fill.style.width = (base ? Math.round(v / base * 100) : 0) + '%'; fill.style.background = colore;
+      b.append(el('div', {className: 'barra'}, [el('span', {textContent: t}), el('b', {textContent: v + (base ? ' · ' + perc(v, base) : '')}), el('i', {}, [fill])]));
+    });
+    return b;
+  };
+  d.append(barre('Il percorso dei contatti', [['Potenziali clienti', tot, '#0f1b2d'], ['Contattati', contattati, '#1e3a5f'], ['Hanno risposto', risposto, '#2563eb'],
+    ['Consulenza prenotata', prenotate, '#0d9488'], ['Consulenza fatta', fatte, '#14b8a6'], ['Clienti', clienti, '#16a34a']], tot));
+  d.append(barre('Qualità dei contatti', [['In target', inTarget, '#16a34a'], ['Fuori target', fuori, '#f97316'], ['Spam', spam, '#dc2626'],
+    ['Persi', persi, '#94a3b8'], ['Da valutare', daValutare, '#cbd5e1']], tot));
+  d.append(barre('Risposte', [['Hanno risposto', risposto, '#2563eb'], ['Contattati, non hanno risposto', nonRisposto, '#f59e0b'],
+    ['Non ancora contattati', nonContattati, '#cbd5e1']], tot));
+  d.append(barre('Consulenze', [['Prenotate', prenotate, '#0d9488'], ['Fatte', fatte, '#14b8a6'], ['Saltate (non venuti)', saltate, '#f97316'],
+    ['Diventati clienti', clienti, '#16a34a']], prenotate));
+
+  const s = el('div', {className: 'soldi'});
+  [['Spesa ads', spesa ? euro(spesa) : '—'], ['Incasso dai clienti', euro(incasso)],
+   ['Costo per contatto', costo(tot)], ['Costo per contatto in target', costo(inTarget)],
+   ['Costo per consulenza prenotata', costo(prenotate)], ['Costo per consulenza fatta', costo(fatte)], ['Costo per cliente', costo(clienti)],
+   ['Ritorno (incasso ÷ spesa)', spesa ? (incasso / spesa).toLocaleString('it-IT', {maximumFractionDigits: 1}) + ' volte' : '—'],
+   ['Tasso di risposta', perc(risposto, contattati)], ['Da contatto a consulenza', perc(prenotate, tot)], ['Da consulenza fatta a cliente', perc(clienti, fatte)]]
+    .forEach(([t, v]) => { s.append(el('span', {textContent: t})); s.append(el('b', {textContent: v})); });
+  d.append(el('div', {className: 'box'}, [el('b', {textContent: 'Soldi e resa'}), s]));
+  d.append(el('p', {className: 'mute', style: 'color:#5b6b80;text-align:center;margin:4px 0 20px', textContent: 'Conti sui contatti arrivati ' + (mese ? 'a ' + nomeMese(PERIODO) : 'da sempre') + ' (giorno arrivo lead).'}));
+}
+
+document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') accedi(); });
+if (ricordato()) { attendi('Un attimo…'); entra(ricordato()); }
 </script>
 </body>
 </html>
