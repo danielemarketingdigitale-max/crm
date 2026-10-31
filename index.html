@@ -58,13 +58,7 @@
   } else {
     var crm = 'https://script.google.com/macros/s/' + app + '/exec?k=' + chiave;
     if (p.get('home') === '1' || navigator.standalone) {
-      // aperto dall'icona: il CRM si apre qui dentro, a schermo intero, senza uscire verso Safari/Chrome
-      var f = document.createElement('iframe');
-      f.src = crm;
-      f.setAttribute('allow', 'clipboard-write');
-      f.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;background:#f4f6fa';
-      document.body.innerHTML = '';
-      document.body.appendChild(f);
+      location.replace(crm);                       // aperto dall'icona: dritto nel CRM
     } else {
       // il link salvato sulla schermata Home sarà questo, che apre subito il CRM
       history.replaceState(null, '', location.pathname + '#a=' + app + '&k=' + chiave + '&home=1');
