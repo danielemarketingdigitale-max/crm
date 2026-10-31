@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>CRM GD Marketing</title>
+<meta name="apple-mobile-web-app-title" content="CRM">
+<link rel="apple-touch-icon" href="icona-180.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0f1b2d">
+<style>
+  :root { --ink: #0f1b2d; --ink2: #16263d; --accent: #5eead4; --mute: #a9b6c8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: linear-gradient(160deg, var(--ink2), #0a1322); color: #fff;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 420px; padding: 56px 20px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+  img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 12px 40px rgba(0,0,0,.45); }
+  h1 { margin: 6px 0 0; font-size: 26px; }
+  p { margin: 0; color: var(--mute); line-height: 1.5; }
+  ol { text-align: left; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 16px 16px 16px 36px; margin: 6px 0; line-height: 1.6; width: 100%; }
+  b { color: var(--accent); }
+  a.btn { display: block; width: 100%; padding: 15px; border-radius: 12px; background: var(--accent); color: var(--ink); font-weight: 700; text-decoration: none; }
+  .nascosto { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <img src="icona-512.png" alt="">
+  <h1>CRM GD Marketing</h1>
+
+  <div id="istruzioni" class="nascosto">
+    <p>Metti il CRM sulla schermata Home, con questa icona:</p>
+    <ol>
+      <li>iPhone: premi <b>Condividi</b> (il quadrato con la freccia) e poi <b>Aggiungi alla schermata Home</b>.</li>
+      <li>Android: menu <b>⋮</b> e poi <b>Aggiungi a schermata Home</b>.</li>
+      <li>Da lì in poi tocca l'icona: entri direttamente nel tuo CRM.</li>
+    </ol>
+    <a class="btn" id="apri" href="#">Apri il CRM adesso</a>
+  </div>
+
+  <p id="errore" class="nascosto">Questo link non è completo. Usa il link personale che ti è stato mandato.</p>
+</main>
+<script>
+  // Il link personale è nella parte dopo "#": il browser la legge ma non la manda mai al server di questa pagina.
+  var p = new URLSearchParams(location.hash.slice(1));
+  var app = p.get('a') || '', chiave = p.get('k') || '';
+  var valido = /^AKfyc[A-Za-z0-9_-]{20,120}$/.test(app) && /^[a-f0-9]{64}$/.test(chiave);
+  if (!valido) {
+    document.getElementById('errore').classList.remove('nascosto');
+  } else {
+    var crm = 'https://script.google.com/macros/s/' + app + '/exec?k=' + chiave;
+    if (p.get('home') === '1' || navigator.standalone) {
+      location.replace(crm);                       // aperto dall'icona: dritto nel CRM
+    } else {
+      // il link salvato sulla schermata Home sarà questo, che apre subito il CRM
+      history.replaceState(null, '', location.pathname + '#a=' + app + '&k=' + chiave + '&home=1');
+      document.getElementById('apri').href = crm;
+      document.getElementById('istruzioni').classList.remove('nascosto');
+    }
+  }
+</script>
+</body>
+</html>
