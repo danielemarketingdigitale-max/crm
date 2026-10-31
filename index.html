@@ -27,6 +27,7 @@
   ol { text-align: left; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 16px 16px 16px 36px; margin: 6px 0; line-height: 1.6; width: 100%; }
   b { color: var(--accent); }
   a.btn { display: block; width: 100%; padding: 15px; border-radius: 12px; background: var(--accent); color: var(--ink); font-weight: 700; text-decoration: none; }
+  input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: #fff; font-size: 16px; margin: 12px 0; }
   .nascosto { display: none; }
 </style>
 </head>
@@ -45,27 +46,45 @@
     <a class="btn" id="apri" href="#">Apri il CRM adesso</a>
   </div>
 
-  <p id="errore" class="nascosto">Questo link non è completo. Usa il link personale che ti è stato mandato.</p>
+  <div id="errore" class="nascosto">
+    <p>Incolla qui una volta il tuo link personale: da lì in poi questa icona ti porta dritto nel CRM.</p>
+    <input id="incolla" type="url" placeholder="Incolla il link" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <a class="btn" id="usa" href="#">Entra</a>
+    <p id="nonvalido" class="nascosto">Questo link non è completo. Copia di nuovo il link personale che ti è stato mandato.</p>
+  </div>
 </main>
 <script>
   // Il link personale è nella parte dopo "#": il browser la legge ma non la manda mai al server di questa pagina.
-  var p = new URLSearchParams(location.hash.slice(1));
-  var app = p.get('a') || '', chiave = p.get('k') || '';
-  var valido = /^AKfyc[A-Za-z0-9_-]{20,120}$/.test(app) && /^[a-f0-9]{64}$/.test(chiave);
-  if (!valido) {
+  // Lo si cerca in tutto l'indirizzo (anche se un'app l'ha codificato) e lo si ricorda su questo telefono,
+  // perché l'icona sulla Home a volte perde la parte dopo "#".
+  function leggi(t) {
+    for (var i = 0; i < 3; i++) { try { t = decodeURIComponent(t); } catch (e) { break; } }
+    var a = /[#&?]a=(AKfyc[A-Za-z0-9_-]{20,120})/.exec(t), k = /[#&?]k=([a-f0-9]{64})/.exec(t);
+    return a && k ? { app: a[1], chiave: k[1] } : null;
+  }
+  function ricorda(l) { try { localStorage.setItem('crm-link', JSON.stringify(l)); } catch (e) {} }
+  function ricordato() { try { return JSON.parse(localStorage.getItem('crm-link')); } catch (e) { return null; } }
+  var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var dalLink = leggi(location.href), l = dalLink || ricordato();
+  var home = /[#&]home=1/.test(location.hash);
+  function vai(l) { location.replace('https://script.google.com/macros/s/' + l.app + '/exec?k=' + l.chiave); }
+
+  if (l) ricorda(l);
+  if (!l) {
     document.getElementById('errore').classList.remove('nascosto');
+    document.getElementById('usa').onclick = function (ev) {
+      ev.preventDefault();
+      var n = leggi(document.getElementById('incolla').value.trim());
+      if (!n) { document.getElementById('nonvalido').classList.remove('nascosto'); return; }
+      ricorda(n); vai(n);
+    };
+  } else if (navigator.standalone || !dalLink || (home && !ios)) {
+    vai(l);                                        // aperto dall'icona: dritto nel CRM
   } else {
-    var crm = 'https://script.google.com/macros/s/' + app + '/exec?k=' + chiave;
-    // iPhone/iPad: dritto nel CRM solo se aperto dall'icona; in Safari resta qui, così si aggiunge la pagina con l'icona e non il CRM
-    var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (navigator.standalone || (p.get('home') === '1' && !ios)) {
-      location.replace(crm);                       // aperto dall'icona: dritto nel CRM
-    } else {
-      // il link salvato sulla schermata Home sarà questo, che apre subito il CRM
-      history.replaceState(null, '', location.pathname + '#a=' + app + '&k=' + chiave + '&home=1');
-      document.getElementById('apri').href = crm;
-      document.getElementById('istruzioni').classList.remove('nascosto');
-    }
+    // iPhone/iPad in Safari: resta qui, così si aggiunge la pagina con l'icona e non il CRM
+    history.replaceState(null, '', location.pathname + '#a=' + l.app + '&k=' + l.chiave + '&home=1');
+    document.getElementById('apri').href = 'https://script.google.com/macros/s/' + l.app + '/exec?k=' + l.chiave;
+    document.getElementById('istruzioni').classList.remove('nascosto');
   }
 </script>
 </body>
