@@ -119,6 +119,7 @@
       <div class="box">
         <b>Date e prezzo</b>
         <label class="campo">Giorno del ricontatto<input id="fRic" placeholder="gg/mm/aaaa"></label>
+        <label class="campo" id="campoConosc">Data e ora della chiamata conoscitiva<input id="fConosc" type="datetime-local"></label>
         <label class="campo">Data e ora della consulenza<input id="fData" type="datetime-local"><span id="fDataVecchia" style="font-size:12px;color:#5b6b80"></span></label>
         <label class="campo">Data conversione<input id="fConv" placeholder="gg/mm/aaaa"></label>
         <label class="campo">Prezzo servizio (serve a Meta per il valore dell'acquisto)<input id="fPrezzo" inputmode="decimal"></label>
@@ -334,6 +335,9 @@ function apri(l) {
   const dc = dataDa(l['data consulenza']);
   document.getElementById('fData').value = dc ? perInput(dc) : '';
   document.getElementById('fDataVecchia').textContent = l['data consulenza'] && !dc ? 'Nel foglio c\'e\' scritto: ' + l['data consulenza'] : '';
+  const dk = dataDa(l['data chiamata conoscitiva']);
+  document.getElementById('fConosc').value = dk ? perInput(dk) : '';
+  document.getElementById('campoConosc').style.display = ('data chiamata conoscitiva' in l) ? '' : 'none';
   document.getElementById('fConv').value = l['data conversione'] || '';
   document.getElementById('fPrezzo').value = l['prezzo servizio'] || '';
   document.getElementById('fNote').value = l['note sul lead'] || '';
@@ -365,6 +369,9 @@ function salva() {
   const vd = document.getElementById('fData').value;   // calendario -> "gg/mm/aaaa hh:mm" come nel foglio
   if (vd) { const p = vd.split('T'), g = p[0].split('-'), prima = dataDa(SEL['data consulenza']);
     if (!prima || perInput(prima) !== vd) campi['data consulenza'] = g[2] + '/' + g[1] + '/' + g[0] + (p[1] && p[1] !== '00:00' ? ' ' + p[1] : ''); }
+  const vk = document.getElementById('fConosc').value;   // chiamata conoscitiva (solo nei CRM che hanno la colonna)
+  if (vk) { const p = vk.split('T'), g = p[0].split('-'), prima = dataDa(SEL['data chiamata conoscitiva']);
+    if (!prima || perInput(prima) !== vk) campi['data chiamata conoscitiva'] = g[2] + '/' + g[1] + '/' + g[0] + (p[1] && p[1] !== '00:00' ? ' ' + p[1] : ''); }
   if (si(campi['cliente'] || SEL['cliente']) && !(campi['prezzo servizio'] || SEL['prezzo servizio'])) {
     const d = document.getElementById('esito'); d.className = 'msg err'; d.textContent = 'Inserisci il prezzo: senza prezzo Meta non riceve il valore dell\'acquisto.'; return;
   }
