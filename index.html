@@ -167,6 +167,7 @@ const GRUPPI = [
   ['Ha risposto?', 'risposto', [['Si','si'],['No','no']], {si:'Segnale a Meta: Contact'}],
   ['Richiamato (follow up)?', 'follow up', [['Si','si'],['No','no']], {}],
   ['Consulenza prenotata?', 'prenotazione consulenza', [['Si','si'],['No','no']], {si:'Segnale a Meta: Schedule'}],
+  ['Consulenza in studio o online?', 'tipo consulenza', [['In studio','in studio'],['Online','online']], {online:'Non cambia i segnali a Meta: prenotata e fatta valgono come in studio', 'in studio':'Non cambia i segnali a Meta'}],
   ['Consulenza fatta?', 'consulenza', [['In attesa','attesa'],['Si, e\' venuto','si'],['No, non e\' venuto','no']], {si:'Segnale a Meta: ConsulenzaFatta', no:'Segnale a Meta: ConsulenzaSaltata'}],
   ['E\' diventato cliente?', 'cliente', [['Si','si'],['No','no']], {si:'Segnale a Meta: Purchase (solo con il prezzo compilato)'}]
 ];
@@ -273,6 +274,7 @@ function dataDa(t) {
   return d;
 }
 function giorni(d) { const o = new Date(); o.setHours(0, 0, 0, 0); const x = new Date(d); x.setHours(0, 0, 0, 0); return Math.round((x - o) / 864e5); }
+function oraDi(d) { return d.getHours() || d.getMinutes() ? ' alle ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') : ''; }
 function tentativi(l) { return parseInt(String(l['tentativi di contatto'] || '0'), 10) || 0; }
 function ultimoTentativo(l) { return dataDa(String(l['tentativi di contatto'] || '').split('–')[1]); }
 function daFare(l) {
@@ -280,10 +282,13 @@ function daFare(l) {
   if (['spam', 'non qualificato', 'perso', 'convertito'].includes(q) || si(l['cliente']) || lo(l['cliente']) === 'no') return '';
   if (si(l['prenotazione consulenza']) && !si(l['consulenza']) && lo(l['consulenza']) !== 'no') {
     const d = dataDa(l['data consulenza']); if (!d) return '';
-    const g = giorni(d);
-    return g === 0 ? 'Consulenza oggi' : g === 1 ? 'Consulenza domani: ricordaglielo' : g === 2 ? 'Consulenza tra 2 giorni: ricordaglielo' : '';
+    const g = giorni(d), dove = lo(l['tipo consulenza']) === 'online' ? ' online' : '';
+    return g === 0 ? 'Consulenza' + dove + ' oggi' + oraDi(d) : g === 1 ? 'Consulenza' + dove + ' domani: ricordaglielo' : g === 2 ? 'Consulenza' + dove + ' tra 2 giorni: ricordaglielo' : '';
   }
   if (si(l['consulenza']) || q === 'non convertito') return '';
+  const k = dataDa(l['data chiamata conoscitiva']);   // call conoscitiva: solo promemoria, nessun segnale a Meta
+  if (k && giorni(k) === 0) return 'Call conoscitiva oggi' + oraDi(k);
+  if (k && giorni(k) === 1) return 'Call conoscitiva domani: ricordaglielo';
   const r = dataDa(l['giorno del ricontatto']);
   if (si(l['risposto']) || lo(l['consulenza']) === 'no') {
     return r && giorni(r) <= 0 && giorni(r) >= -7 ? (lo(l['consulenza']) === 'no' ? 'Non è venuto: richiamalo' : 'Da richiamare oggi') : '';
@@ -350,6 +355,7 @@ function valore(col) { return MOD[col] !== undefined ? MOD[col] : lo(SEL[col]); 
 function disegnaGruppi() {
   const g = document.getElementById('gruppi'); g.innerHTML = '';
   GRUPPI.forEach(([titolo, col, opz, seg]) => {
+    if (col === 'tipo consulenza' && !(col in SEL)) return;   // solo nei CRM che hanno la colonna (oggi Davide)
     const v = valore(col);
     g.append(el('div', {className: 'box'}, [
       el('b', {textContent: titolo}),
