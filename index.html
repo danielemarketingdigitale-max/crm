@@ -114,7 +114,7 @@
       </div>
     </div>
     <div class="righe" style="padding-bottom:0"><div class="box" id="sTent"></div></div>
-    <div class="righe" style="padding-bottom:0" id="campoConosc"><div class="box"><b>Chiamata conoscitiva</b><label class="campo">Giorno e ora della call conoscitiva<input id="fConosc" type="datetime-local"></label><div style="font-size:13px;color:#5b6b80">Solo promemoria: non va a Meta. Premi Salva in fondo.</div></div></div>
+    <div id="parcheggio" class="nascosto"><div class="box" id="campoConosc"><b>Call conoscitiva</b><label class="campo">Giorno e ora della call conoscitiva<input id="fConosc" type="datetime-local"></label><div style="font-size:13px;color:#5b6b80">Solo promemoria: non va a Meta. Premi Salva in fondo.</div></div></div>
     <div class="righe" id="gruppi"></div>
     <div class="righe" style="padding-top:0">
       <div class="box">
@@ -353,7 +353,8 @@ function apri(l) {
 }
 function valore(col) { return MOD[col] !== undefined ? MOD[col] : lo(SEL[col]); }
 function disegnaGruppi() {
-  const g = document.getElementById('gruppi'); g.innerHTML = '';
+  const g = document.getElementById('gruppi'), k = document.getElementById('campoConosc');
+  document.getElementById('parcheggio').append(k); g.innerHTML = '';   // la call conoscitiva va subito dopo "Consulenza prenotata?"
   GRUPPI.forEach(([titolo, col, opz, seg]) => {
     if (col === 'tipo consulenza' && !(col in SEL)) return;   // solo nei CRM che hanno la colonna (oggi Davide)
     const v = valore(col);
@@ -362,6 +363,7 @@ function disegnaGruppi() {
       el('div', {className: 'scelte'}, opz.map(([nome, val]) => el('button', {className: 'pill' + (v === val || (val === 'si' && si(v)) ? ' on' : ''), textContent: nome, onclick: () => { MOD[col] = val; disegnaGruppi(); }}))),
       ...(seg[v] || (si(v) && seg.si) ? [el('div', {className: 'segnale', textContent: seg[v] || seg.si})] : [])
     ]));
+    if (col === 'prenotazione consulenza') g.append(k);
   });
 }
 function contattato() {
