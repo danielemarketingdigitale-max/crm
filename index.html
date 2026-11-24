@@ -173,6 +173,12 @@ const GRUPPI = [
 ];
 const COL = {'Nuovo':['#e0f2fe','#075985'],'Da richiamare':['#fef3c7','#92400e'],'Consulenza fissata':['#dcfce7','#166534'],'Non venuto':['#ffedd5','#9a3412'],'Deve decidere':['#fae8ff','#86198f'],'Cliente':['#ede9fe','#5b21b6'],'Chiuso':['#f1f5f9','#334155']};
 const lo = x => String(x || '').trim().toLowerCase();
+// punteggio del lead (colonna "punteggio lead", scritto da Make per i lead della landing, es. "92 Caldo")
+function punteggio(l) {
+  const v = String(l['punteggio lead'] || '').trim(); if (!v) return '';
+  const ic = /caldo/i.test(v) ? '🔥 ' : /tiepido/i.test(v) ? '🟡 ' : /freddo/i.test(v) ? '❄️ ' : '';
+  return ic + v;
+}
 const si = x => /^s[iì]$/.test(lo(x));
 
 function fase(l) {
@@ -252,7 +258,7 @@ function disegnaElenco() {
     const ph = fase(l), c = COL[ph];
     lista.append(el('button', {className: 'card', onclick: () => apri(l)}, [
       el('div', {className: 'riga'}, [el('b', {textContent: l['nome e cognome'] || '(senza nome)'}), el('span', {className: 'mute', style: 'color:#5b6b80', textContent: l['giorno arrivo lead']})]),
-      el('div', {className: 'riga'}, [el('span', {style: 'font-size:13px;color:#44546a', textContent: (l['città'] || '') + (l['qualità lead'] ? ' · ' + l['qualità lead'] : '')}),
+      el('div', {className: 'riga'}, [el('span', {style: 'font-size:13px;color:#44546a', textContent: (l['città'] || '') + (l['qualità lead'] ? ' · ' + l['qualità lead'] : '') + (punteggio(l) ? ' · ' + punteggio(l) : '')}),
         el('span', {className: 'chip', style: 'background:' + c[0] + ';color:' + c[1], textContent: FILTRO === 'Oggi' ? daFare(l) : ph})])
     ]));
   });
@@ -331,7 +337,7 @@ function segnaTentativo(n) {
 function apri(l) {
   SEL = l; MOD = {};
   document.getElementById('sNome').textContent = l['nome e cognome'] || '(senza nome)';
-  document.getElementById('sInfo').textContent = (l['città'] || '') + ' · arrivato il ' + (l['giorno arrivo lead'] || '');
+  document.getElementById('sInfo').textContent = (l['città'] || '') + ' · arrivato il ' + (l['giorno arrivo lead'] || '') + (punteggio(l) ? ' · punteggio ' + punteggio(l) : '');
   document.getElementById('sModulo').textContent = l['note lead'] || '';
   let tel = String(l['numero'] || '').replace(/\D/g, ''); if (/^3\d{8,9}$/.test(tel)) tel = '39' + tel;
   document.getElementById('sChiama').href = 'tel:+' + tel;
